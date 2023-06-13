@@ -1,0 +1,12 @@
+{
+    "name": "flutter_chrome_extension",
+    "description": "flutter_chrome_extension",
+    "version": "1.0.6",
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "action": {
+        "default-popup": "index.html"
+    },
+    "manifest_version": 3
+}

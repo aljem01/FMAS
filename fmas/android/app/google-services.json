@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "421517936333",
+    "project_id": "fmas-51b75",
+    "storage_bucket": "fmas-51b75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421517936333:android:2c5cb472154c715b058b84",
+        "android_client_info": {
+          "package_name": "com.example.fmas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421517936333-ifu7ocel28kbemakis9p9eohjtu9s4qe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2bskPxmH1eKDbZHwlQ1YUYeZVnH488ow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421517936333-ifu7ocel28kbemakis9p9eohjtu9s4qe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
