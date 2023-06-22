@@ -1,5 +1,9 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fma_project/helpers/check_session.dart';
 import '../helpers/assets.dart';
 import '../helpers/colors.dart';
 import '../helpers/routes.dart';
@@ -73,9 +77,27 @@ class HomePage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(18.0),
                                     side: const BorderSide(
                                         color: AppColor.primaryColor)))),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                              context, AppRoute.safeFloodScreenRoute);
+                        onPressed: () async {
+                          try {
+                            AndroidOptions _getAndroidOptions() =>
+                                const AndroidOptions(
+                                  encryptedSharedPreferences: true,
+                                );
+                            final storage = FlutterSecureStorage(
+                                aOptions: _getAndroidOptions());
+                            // final storage = FlutterSecureStorage();
+                            final userData =
+                                (await storage.read(key: 'loggedInUser')) ?? '';
+                            if (userData == '') {
+                              Navigator.pushNamed(
+                                  context, AppRoute.signupScreenRoute);
+                            } else {
+                              final getSecureStorage = CheckSession();
+                              getSecureStorage.checkSessionInfo(context);
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         child: const Text(AppString.getStarted,
                             style: TextStyle(
@@ -92,9 +114,9 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(width: 5),
                       InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoute.loginScreenRoute);
+                          onTap: () async {
+                            final getSecureStorage = CheckSession();
+                            getSecureStorage.checkSessionInfo(context);
                           },
                           child: const Text(
                             AppString.login,

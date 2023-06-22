@@ -28,7 +28,7 @@ class AppString {
   static const String callEmergency = "Call Emergency";
   static const String registerFamilyMember = "Register a family member";
   static const String register = "Register";
-  static const String rainfallIntensity = "Rainfall Intensity";
+  static const String rainfallIntensity = "Rainfall";
   static const String waterLevel = "Water Level";
   static const String percentageChance90 = "90%";
   static const String percentageChance50 = "50%";

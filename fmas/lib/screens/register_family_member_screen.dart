@@ -8,20 +8,20 @@ import '../helpers/routes.dart';
 import '../helpers/form_processing.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class RegisterFamilyMember extends StatefulWidget {
+  const RegisterFamilyMember({super.key});
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<RegisterFamilyMember> createState() => _RegisterFamilyMemberState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  String _currentResidencyValue = 'Resident';
-  final _residencies = ["Resident", "Authority"];
+class _RegisterFamilyMemberState extends State<RegisterFamilyMember> {
+  // String _currentResidencyValue = 'Resident';
+  // final _residencies = ["Resident", "Authority"];
   bool _agree = false;
   @override
   void initState() {
     super.initState();
-    _currentResidencyValue = 'Resident';
+    // _currentResidencyValue = 'Resident';
   }
 
   TextEditingController fullNameController = TextEditingController();
@@ -100,78 +100,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: 200,
-                      height: 30,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            bottomLeft: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                            bottomRight: Radius.circular(10.0)),
-                        color: AppColor.primaryColor,
-                      ),
-                      margin: const EdgeInsets.only(bottom: 8),
-                      // padding: const EdgeInsets.all(1.0),
-                      child: FormField<String>(
-                        builder: (FormFieldState<String> state) {
-                          return InputDecorator(
-                            decoration: InputDecoration(
-                                fillColor: AppColor.primaryColor,
-                                filled: true,
-                                contentPadding: const EdgeInsets.all(5),
-                                labelStyle: const TextStyle(
-                                    color: AppColor.cardColor, fontSize: 10.0),
-                                // errorStyle: const TextStyle(
-                                //     color: Colors.redAccent, fontSize: 10.0),
-                                //  hintText: 'Please select residency status',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5.0))),
-                            isEmpty: _currentResidencyValue == '',
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                iconEnabledColor: Colors.white,
-                                iconDisabledColor: Colors.white,
-                                isDense: true,
-                                // ignore: prefer_const_constructors
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 24,
-                                elevation: 16,
-                                // ignore: prefer_const_constructors
-                                style: TextStyle(
-                                    color: Colors.deepPurple, fontSize: 30.0),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.deepPurpleAccent,
-                                ),
-                                //  iconSize: 40.0,
-                                value: _currentResidencyValue,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _currentResidencyValue = newValue!;
-                                    state.didChange(newValue);
-                                    if (_currentResidencyValue == "Authority") {
-                                      Navigator.pushNamed(
-                                          context, AppRoute.signupCodeRoute);
-                                    }
-                                  });
-                                },
-                                items: _residencies.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value,
-                                        style: const TextStyle(
-                                            color: AppColor.cardColor,
-                                            fontSize: 12.0)),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
                     CoolTextField(
                         name: AppString.fullName,
                         fullNameController: fullNameController),
@@ -241,7 +169,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   fontSize: 16.0);
                               String json =
                                   '{"account": "Resident", "name": "$name", "contact": "$contact", "residence": "$residence", "username": "$username", "password": "$password", "action": "register"}';
-                              user.getData(json, "Resident", context);
+                              user.getDataRegisterFamily(
+                                  json, "Resident", context);
                             } else {
                               Fluttertoast.showToast(
                                   msg: "Passwords do not match",

@@ -63,10 +63,10 @@ class _FloodingScreenState extends State<FloodingScreen> {
                       Container(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 10, top: 20),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const CircleAvatar(
+                            CircleAvatar(
                               backgroundColor: AppColor.cardColor,
                               child: Icon(
                                 Icons.location_pin,
@@ -74,7 +74,7 @@ class _FloodingScreenState extends State<FloodingScreen> {
                               ),
                             ),
                             Column(
-                              children: const [
+                              children: [
                                 SizedBox(height: 10),
                                 Text(
                                   AppString.riverName,
@@ -92,7 +92,7 @@ class _FloodingScreenState extends State<FloodingScreen> {
                                 ),
                               ],
                             ),
-                            const CircleAvatar(
+                            CircleAvatar(
                               backgroundColor: AppColor.cardColor,
                               child: Icon(
                                 Icons.account_circle,
@@ -106,8 +106,8 @@ class _FloodingScreenState extends State<FloodingScreen> {
                         margin: const EdgeInsets.only(top: 65),
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 0, top: 0),
-                        child: Column(
-                          children: const [
+                        child: const Column(
+                          children: [
                             Text(
                               AppString.percentageChance90,
                               style: TextStyle(
@@ -152,9 +152,9 @@ class _FloodingScreenState extends State<FloodingScreen> {
                   Container(
                     padding: const EdgeInsets.only(
                         left: 5, right: 5, bottom: 10, top: 10),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.arrow_back,
                           size: 25,
@@ -194,10 +194,10 @@ class _FloodingScreenState extends State<FloodingScreen> {
                               ],
                             ),
                           ),
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 CupertinoIcons.cloud_rain,
                                 size: 34,
@@ -238,10 +238,10 @@ class _FloodingScreenState extends State<FloodingScreen> {
                               ],
                             ),
                           ),
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.water,
                                 size: 34,
@@ -287,9 +287,9 @@ class _FloodingScreenState extends State<FloodingScreen> {
                                     side: const BorderSide(
                                         color: AppColor.primaryColor)))),
                         onPressed: () {},
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.call,
                               size: 25,

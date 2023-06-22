@@ -1,12 +1,17 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 import 'package:flutter/material.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+// import 'package:firebase_core/firebase_core.dart';
 import '../helpers/strings.dart';
 
 import '../helpers/assets.dart';
 import '../helpers/colors.dart';
 import '../helpers/routes.dart';
+import '../helpers/form_processing.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -81,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   context, AppRoute.defaultRoute);
                             },
                           ),
-                          // ignore: prefer_const_constructors
                           SizedBox(
                             width: 100,
                           ),
@@ -139,16 +143,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius: BorderRadius.circular(5.0))),
                             isEmpty: _currentResidencyValue == '',
                             child: DropdownButtonHideUnderline(
+                              // ignore: duplicate_ignore
                               child: DropdownButton<String>(
                                 isExpanded: true,
                                 iconEnabledColor: Colors.white,
                                 iconDisabledColor: Colors.white,
                                 isDense: true,
-                                // ignore: prefer_const_constructors
                                 icon: Icon(Icons.arrow_drop_down),
                                 iconSize: 24,
                                 elevation: 16,
-                                // ignore: prefer_const_constructors
                                 style: TextStyle(
                                     color: Colors.deepPurple, fontSize: 30.0),
                                 underline: Container(
@@ -161,6 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   setState(() {
                                     _currentResidencyValue = newValue!;
                                     state.didChange(newValue);
+                                    if (_currentResidencyValue == "Authority") {
+                                      Navigator.pushNamed(context,
+                                          AppRoute.loginCodeScreenRoute);
+                                    }
                                   });
                                 },
                                 items: _residencies.map((String value) {
@@ -179,8 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     CoolTextField(
-                        name: AppString.userName,
-                        fullNameController: usernameController),
+                        name: "Email", fullNameController: usernameController),
                     CoolTextField(
                         name: AppString.password,
                         fullNameController: passwordController),
@@ -200,8 +206,56 @@ class _LoginScreenState extends State<LoginScreen> {
                                           color: AppColor.primaryColor)*/
                           ))),
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, AppRoute.loginCodeScreenRoute);
+                            final name = usernameController.text;
+                            /*
+                            usernameController.text =
+                                "THIS IS IT USERNAME" + name;
+                                */
+                            final password = passwordController.text;
+                            final user = ProcessForm();
+                            /*
+                            passwordController.text =
+                                "THIS IS IT PASSWORD " + password;
+                                */
+                            // final json = {
+                            //   'name': name,
+                            //   'password': password,
+                            //   'account': _currentResidencyValue,
+                            // };
+
+                            // Uri.parse('https://dart.dev/f/packages/http.json');
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Authentification in progress, please wait ...",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Color.fromRGBO(0, 255, 0, 0.8),
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            String json = '{"account": "' +
+                                _currentResidencyValue +
+                                '", "name": "' +
+                                name +
+                                '", "password": "' +
+                                password +
+                                '", "action": "login"}';
+
+                            user.getData(json, "Resident", context);
+                            // Response response = awaits get("http://localhost/agrox/fmas/get_employees");
+                            /*
+                            Fluttertoast.showToast(
+                                msg: "This is a toast message",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.TOP,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Color.fromRGBO(255, 0, 0, 1),
+                                textColor: Color.fromRGBO(255, 255, 255, 1),
+                                fontSize: 12);
+                                */
+                            // CreateUser(name: name, password: password);
+                            // Navigator.pushNamed(context, AppRoute.defaultRoute);
+                            // Navigator.pushNamed(context, AppRoute.defaultRoute);
                           },
                           child: const Text(AppString.login,
                               style: TextStyle(
@@ -280,5 +334,44 @@ class CoolTextField extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ignore: non_constant_identifier_names
+/*
+Future CreateUser({required String name, required String password}) async {
+  // ignore: unused_local_variable
+  var FirebaseFirestore;
+  final user = FirebaseFirestore.instance.collection('users').doc();
+  final json = {
+    'name': name,
+    'password': password,
+  };
+  await user.set(json);
+}
+*/
+void getData(json, context) async {
+  // final httpPackageUrl = Uri.parse(
+  //     'https://api.thingspeak.com/channels.json?api_key=MUEYIB55LV3BCSMW');
+  final httpPackageUrl =
+      Uri.parse("https://agrox.farm/fmas/get_employees/" + json);
+  final httpPackageInfo = await http.read(httpPackageUrl);
+  // print(httpPackageInfo);
+  if (httpPackageInfo == "success") {
+    Navigator.pushNamed(context, AppRoute.safeFloodScreenRoute);
+  } else {
+    if (httpPackageInfo == "proceed to login") {
+      Navigator.pushNamed(context, AppRoute.loginCodeScreenRoute);
+    } else {
+      Fluttertoast.cancel();
+      Fluttertoast.showToast(
+          msg: httpPackageInfo,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromRGBO(255, 0, 0, 0.8),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 }

@@ -5,17 +5,49 @@ import '../helpers/strings.dart';
 import '../helpers/assets.dart';
 import '../helpers/colors.dart';
 
-class AuthorityNotificationScreen extends StatefulWidget {
-  const AuthorityNotificationScreen({super.key});
+class ResidentNotificationScreen extends StatefulWidget {
+  const ResidentNotificationScreen({super.key});
   @override
-  State<AuthorityNotificationScreen> createState() =>
-      _AuthorityNotificationScreenState();
+  State<ResidentNotificationScreen> createState() =>
+      _ResidentNotificationScreenState();
 }
 
-class _AuthorityNotificationScreenState
-    extends State<AuthorityNotificationScreen> {
+class _ResidentNotificationScreenState
+    extends State<ResidentNotificationScreen> {
   @override
   Widget build(BuildContext context) {
+    var commentWidgets = <Widget>[];
+    for (var i = 0; i < 10; i++) {
+      commentWidgets.add(
+        Container(
+          width: 200.0,
+          height: 70.0,
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18.0),
+              border: Border.all(
+                color: Colors.green,
+                width: 1,
+              )),
+          child: const Row(children: [
+            SizedBox(width: 20),
+            Icon(
+              Icons.check_circle_outline,
+              size: 30,
+              color: AppColor.greenFloodColor,
+            ),
+            SizedBox(width: 10),
+            SizedBox(
+              width: 240,
+              child: Text(AppString.notificationText,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
+            ),
+          ]),
+        ),
+      ); // TODO: Whatever layout you need for each widget.
+    }
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -37,7 +69,7 @@ class _AuthorityNotificationScreenState
                 child: Stack(
                   children: [
                     SvgPicture.asset(AppAsset.countryUgandaSvg,
-                        // color: Colors.transparent.withOpacity(0.2),
+                        //     color: Colors.transparent.withOpacity(0.2),
                         semanticsLabel: 'Asset'),
                     Positioned(
                         top: 100,
@@ -393,7 +425,7 @@ class _AuthorityNotificationScreenState
                               size: 25,
                             ),
                             SizedBox(width: 20),
-                            Text(AppString.notifyResidents,
+                            Text(AppString.callEmergency,
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w800)),
                           ],
@@ -403,12 +435,12 @@ class _AuthorityNotificationScreenState
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        AppString.registerResident,
+                        AppString.registerFamilyMember,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.normal),
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 5),
                       InkWell(
                           onTap: () {},
                           child: const Text(

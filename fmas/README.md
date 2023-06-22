@@ -1,4 +1,4 @@
-# example
+# fma_project
 
 A new Flutter project.
 

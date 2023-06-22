@@ -5,8 +5,6 @@ import '../helpers/strings.dart';
 import '../helpers/assets.dart';
 import '../helpers/colors.dart';
 import '../helpers/routes.dart';
-import '../helpers/form_processing.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -81,14 +79,13 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          IconButton(
-                            // ignore: prefer_const_constructors
-                            icon: Icon(Icons.arrow_back),
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, AppRoute.defaultRoute);
-                            },
+                          const Icon(
+                            Icons.arrow_back,
+                            size: 30,
                           ),
+                          InkWell(onTap: () {
+                            Navigator.pushNamed(context, AppRoute.defaultRoute);
+                          }),
                           const SizedBox(
                             width: 100,
                           ),
@@ -151,10 +148,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                   setState(() {
                                     _currentResidencyValue = newValue!;
                                     state.didChange(newValue);
-                                    if (_currentResidencyValue == "Authority") {
-                                      Navigator.pushNamed(
-                                          context, AppRoute.signupCodeRoute);
-                                    }
                                   });
                                 },
                                 items: _residencies.map((String value) {
@@ -209,7 +202,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
                     ),
-                    Expanded(
+                    Container(
+                      width: double.infinity,
+                      height: 40,
+                      margin: const EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 10),
                       child: TextButton(
                           style: ButtonStyle(
                               //  foregroundColor: AppColor.customPrimaryColor,
@@ -220,39 +217,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                       side: const BorderSide(
                                           color: AppColor.primaryColor)))),
                           onPressed: () {
-                            final name = fullNameController.text;
-                            final contact = contactController.text;
-                            final residence = placeController.text;
-                            final username = emailController.text;
-                            final password = passwordController.text;
-
-                            if (password == confirmPasswordController.text) {
-                              final user = ProcessForm();
-
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "Authentification in progress, please wait ...",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor:
-                                      const Color.fromRGBO(0, 255, 0, 0.8),
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                              String json =
-                                  '{"account": "Resident", "name": "$name", "contact": "$contact", "residence": "$residence", "username": "$username", "password": "$password", "action": "register"}';
-                              user.getData(json, "Resident", context);
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: "Passwords do not match",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor:
-                                      const Color.fromRGBO(255, 0, 0, 0.8),
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                            }
+                            Navigator.pushNamed(
+                                context, AppRoute.signupCodeRoute);
                           },
                           child: const Text(AppString.createAccount,
                               style: TextStyle(

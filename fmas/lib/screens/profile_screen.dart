@@ -1,10 +1,17 @@
+// ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings, no_leading_underscores_for_local_identifiers
+
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import '../helpers/strings.dart';
-
-import '../helpers/assets.dart';
-import '../helpers/colors.dart';
+import 'package:fma_project/helpers/assets.dart';
+import 'package:fma_project/helpers/check_session.dart';
+import 'package:fma_project/helpers/colors.dart';
+import 'package:fma_project/helpers/strings.dart';
+// import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,8 +21,44 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool buttonDisabled = true;
+  String _name = "";
+  String _email = "";
+  String _contact = "";
+  Timer? timer;
+  void startTimer() {
+    checkSession();
+    /*
+    timer = Timer.periodic(const Duration(seconds: 2), (_) {
+      checkSession();
+      setState(() => {});
+    });
+    */
+    // checkSession();
+    // setState(() => {});
+  }
+
+  void checkSession() async {
+    try {
+      AndroidOptions _getAndroidOptions() => const AndroidOptions(
+            encryptedSharedPreferences: true,
+          );
+      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+      final userDetailsData =
+          (await storage.read(key: 'loggedInUserDetails')) ?? '';
+      if (userDetailsData == '') {
+      } else {
+        final parsedJson = jsonDecode(userDetailsData);
+        _name = parsedJson['name'];
+        _email = parsedJson['email'];
+        _contact = parsedJson['phoneNumber'];
+        setState(() => {});
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    startTimer();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -64,10 +107,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 10, top: 20),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const CircleAvatar(
+                            CircleAvatar(
                               backgroundColor: AppColor.cardColor,
                               child: Icon(
                                 Icons.location_pin,
@@ -75,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             Column(
-                              children: const [
+                              children: [
                                 SizedBox(height: 10),
                                 Text(
                                   AppString.areaTwo,
@@ -93,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ],
                             ),
-                            const CircleAvatar(
+                            CircleAvatar(
                               backgroundColor: AppColor.cardColor,
                               child: Icon(
                                 Icons.account_circle,
@@ -107,8 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         margin: const EdgeInsets.only(top: 65),
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 0, top: 0),
-                        child: Column(
-                          children: const [
+                        child: const Column(
+                          children: [
                             Text(
                               AppString.percentageChance30,
                               style: TextStyle(
@@ -155,18 +198,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         left: 5, right: 5, bottom: 10, top: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(
-                          Icons.arrow_back,
-                          size: 25,
-                          color: AppColor.primaryColor,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () async {
+                            CheckSession().checkSessionInfo(context);
+                          },
                         ),
-                        Text(
+                        const Text(
                           AppString.profile,
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.notifications,
                           size: 25,
                           color: AppColor.primaryColor,
@@ -208,14 +252,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        const Text(AppString.name,
-                            style: TextStyle(
+                        Text(_name,
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w800)),
-                        const Text(AppString.email,
-                            style: TextStyle(
+                        Text(_email,
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w400)),
-                        const Text(AppString.contact,
-                            style: TextStyle(
+                        Text(_contact,
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w400)),
                         const CoolMenuItem(
                           name: AppString.contactUs,
@@ -233,52 +277,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           // margin: const EdgeInsets.all(15.0),
                           width: double.infinity,
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
-
+                          /*
                           child: const Text(
                             AppString.logout,
                             style: TextStyle(
                                 color: AppColor.emergencyColor,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700),
+                                
+                          ),
+                          */
+                          child: InkWell(
+                            onTap: () async {
+                              AndroidOptions _getAndroidOptions() =>
+                                  const AndroidOptions(
+                                    encryptedSharedPreferences: true,
+                                  );
+                              final storage = FlutterSecureStorage(
+                                  aOptions: _getAndroidOptions());
+                              // await storage.deleteAll();
+                              await storage.delete(key: 'loggedInUser');
+                              CheckSession().checkSessionInfo(context);
+                            },
+                            child: const Text(AppString.logout,
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w800)),
                           ),
                         )
                       ],
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 40,
-                    margin: const EdgeInsets.only(
-                        left: 20, right: 20, top: 20, bottom: 10),
-                    child: TextButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (state) => buttonDisabled
-                                    ? AppColor.disbledButtonColor
-                                    : AppColor.emergencyColor),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(
-                                        color: buttonDisabled
-                                            ? AppColor.disbledButtonColor
-                                            : AppColor.primaryColor)))),
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.call,
-                              size: 25,
-                            ),
-                            SizedBox(width: 20),
-                            Text(AppString.notifyResidentsNow,
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w800)),
-                          ],
-                        )),
-                  ),
+                  Expanded(
+                      child: TextButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith((state) =>
+                                      buttonDisabled
+                                          ? AppColor.disbledButtonColor
+                                          : AppColor.emergencyColor),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                          color: buttonDisabled
+                                              ? AppColor.disbledButtonColor
+                                              : AppColor.primaryColor)))),
+                          onPressed: () {},
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.call,
+                                size: 25,
+                              ),
+                              SizedBox(width: 20),
+                              Text(AppString.notifyResidentsNow,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800)),
+                            ],
+                          ))),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

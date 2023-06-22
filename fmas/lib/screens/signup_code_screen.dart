@@ -4,6 +4,9 @@ import '../helpers/strings.dart';
 
 import '../helpers/assets.dart';
 import '../helpers/colors.dart';
+import '../helpers/routes.dart';
+import '../helpers/form_processing.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignupCodeScreen extends StatefulWidget {
   const SignupCodeScreen({super.key});
@@ -12,13 +15,13 @@ class SignupCodeScreen extends StatefulWidget {
 }
 
 class _SignupCodeScreenState extends State<SignupCodeScreen> {
-  String _currentResidencyValue = 'Resident';
+  String _currentResidencyValue = 'Authority';
   final _residencies = ["Resident", "Authority"];
   bool _agree = false;
   @override
   void initState() {
     super.initState();
-    _currentResidencyValue = 'Resident';
+    _currentResidencyValue = 'Authority';
   }
 
   TextEditingController signUpCodeController = TextEditingController();
@@ -71,15 +74,18 @@ class _SignupCodeScreenState extends State<SignupCodeScreen> {
                       padding: const EdgeInsets.only(left: 5, top: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [
-                          Icon(
-                            Icons.arrow_back,
-                            size: 30,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, AppRoute.defaultRoute);
+                            },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 100,
                           ),
-                          Text(
+                          const Text(
                             AppString.signup,
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
@@ -121,15 +127,16 @@ class _SignupCodeScreenState extends State<SignupCodeScreen> {
                                 iconEnabledColor: Colors.white,
                                 iconDisabledColor: Colors.white,
                                 isDense: true,
-                                icon: const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: 0, top: 0, right: 20),
-                                    child: Icon(
-                                      Icons.arrow_drop_down,
-                                      size: 40,
-                                    ),
-                                  ),
+                                // ignore: prefer_const_constructors
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                // ignore: prefer_const_constructors
+                                style: TextStyle(
+                                    color: Colors.deepPurple, fontSize: 30.0),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
                                 ),
                                 //  iconSize: 40.0,
                                 value: _currentResidencyValue,
@@ -137,6 +144,10 @@ class _SignupCodeScreenState extends State<SignupCodeScreen> {
                                   setState(() {
                                     _currentResidencyValue = newValue!;
                                     state.didChange(newValue);
+                                    if (_currentResidencyValue == "Resident") {
+                                      Navigator.pushNamed(
+                                          context, AppRoute.signupScreenRoute);
+                                    }
                                   });
                                 },
                                 items: _residencies.map((String value) {
@@ -193,7 +204,25 @@ class _SignupCodeScreenState extends State<SignupCodeScreen> {
                                       borderRadius: BorderRadius.circular(18.0),
                                       side: const BorderSide(
                                           color: AppColor.primaryColor)))),
-                          onPressed: () {},
+                          onPressed: () {
+                            final code = signUpCodeController.text;
+                            final password = passwordController.text;
+                            final user = ProcessForm();
+
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Authentification in progress, please wait ...",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: const Color.fromRGBO(0, 255, 0, 0.8),
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                            String json =
+                                '{"account": "Authority", "name": "$code", "password": "$password", "action": "register"}';
+
+                            user.getData(json, "Authority", context);
+                          },
                           child: const Text(AppString.createAccount,
                               style: TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.w800))),

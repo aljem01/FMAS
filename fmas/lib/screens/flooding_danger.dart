@@ -1,10 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../helpers/strings.dart';
-
-import '../helpers/assets.dart';
-import '../helpers/colors.dart';
+import 'package:fma_project/helpers/assets.dart';
+import 'package:fma_project/helpers/colors.dart';
+import 'package:fma_project/helpers/routes.dart';
+import 'package:fma_project/helpers/strings.dart';
+import 'package:fma_project/screens/flooding_safe.dart';
+import 'package:fma_project/screens/flooding_warning.dart';
+import 'package:fma_project/screens/resident_notifications_screen.dart';
+import 'package:http/http.dart' as http;
+import "package:url_launcher/url_launcher.dart" as UrlLauncher;
 
 class DangerFloodingScreen extends StatefulWidget {
   const DangerFloodingScreen({super.key});
@@ -13,8 +23,70 @@ class DangerFloodingScreen extends StatefulWidget {
 }
 
 class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
+  _DangerFloodingScreenState();
+  int _waterLevel = 0;
+  int _chanceOfFlooding = 0;
+  int _precipitation = 0;
+  Timer? timer;
+  int rank = 0;
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      getData();
+      setState(() => {});
+    });
+  }
+
+  void getData() async {
+    try {
+      final fromSensor = await http.read(
+          Uri.parse("https://api.thingspeak.com/channels/2186309/feeds.json"));
+      final parsedJson = jsonDecode(fromSensor);
+      final lastEnteredID = parsedJson['channel']['last_entry_id'];
+      final feeds = parsedJson['feeds'];
+      for (var eachFeed in feeds) {
+        if (eachFeed['entry_id'] == lastEnteredID) {
+          _waterLevel = int.parse(eachFeed["field1"]);
+          if (_waterLevel > 100) {
+            _chanceOfFlooding = 100;
+          } else {
+            _chanceOfFlooding = _waterLevel;
+          }
+        }
+      }
+      if (_waterLevel < 220) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const SafeFloodingScreen()));
+      } else {
+        if (_waterLevel < 260) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const WarningFloodingScreen()));
+        } else {}
+      }
+    } catch (e) {}
+    try {
+      var headers = {
+        'x-api-key':
+            'b81175a8e04ba17d946c19e283919b72b479d8835be39363b93682aadebe9592',
+        'Content-type': 'application/json'
+      };
+      var request = http.Request(
+          'GET',
+          Uri.parse(
+              'https://api.ambeedata.com/weather/latest/by-lat-lng?lat=0.347596&lng=32.582520'));
+      request.body = '''''';
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        final parsedJson = jsonDecode(await response.stream.bytesToString());
+        _precipitation = parsedJson["data"]["precipIntensity"];
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    startTimer();
+
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -73,8 +145,8 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                                 size: 35,
                               ),
                             ),
-                            Column(
-                              children: const [
+                            const Column(
+                              children: [
                                 SizedBox(height: 10),
                                 Text(
                                   AppString.riverName,
@@ -92,13 +164,15 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                                 ),
                               ],
                             ),
-                            const CircleAvatar(
-                              backgroundColor: AppColor.cardColor,
-                              child: Icon(
-                                Icons.account_circle,
-                                size: 25,
-                              ),
-                            ),
+                            CircleAvatar(
+                                backgroundColor: AppColor.cardColor,
+                                child: IconButton(
+                                  icon: const Icon(Icons.account_circle),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoute.profileScreenRoute);
+                                  },
+                                )),
                           ],
                         ),
                       ),
@@ -107,15 +181,15 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 0, top: 0),
                         child: Column(
-                          children: const [
+                          children: [
                             Text(
-                              AppString.percentageChance90,
-                              style: TextStyle(
+                              "$_chanceOfFlooding%",
+                              style: const TextStyle(
                                   color: AppColor.cardColor,
                                   fontSize: 55,
                                   fontWeight: FontWeight.w700),
                             ),
-                            Text(
+                            const Text(
                               AppString.chanceOfFlooding,
                               style: TextStyle(
                                   color: AppColor.cardColor,
@@ -154,19 +228,29 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                         left: 5, right: 5, bottom: 10, top: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(
-                          Icons.arrow_back,
-                          size: 25,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRoute.defaultRoute);
+                          },
                         ),
-                        Text(
+                        const Text(
                           AppString.details,
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        Icon(
-                          Icons.notifications,
-                          size: 25,
+                        IconButton(
+                          icon: const Icon(Icons.notifications),
+                          onPressed: () async {
+                            final fromSensor = await http.read(Uri.parse(
+                                "https://api.thingspeak.com/channels/2186309/feeds.json"));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => ResidentNotificationScreen(
+                                        jsonData: fromSensor)));
+                          },
                         ),
                       ],
                     ),
@@ -195,14 +279,14 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
+                            children: [
+                              const Icon(
                                 CupertinoIcons.cloud_rain,
                                 size: 34,
                                 color: AppColor.cardColor,
                               ),
-                              SizedBox(height: 5),
-                              Text(
+                              const SizedBox(height: 5),
+                              const Text(
                                 AppString.rainfallIntensity,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -210,11 +294,11 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.normal),
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Text(
-                                AppString.unitOne,
+                                "$_precipitation",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: AppColor.cardColor,
                                     fontSize: 26,
                                     fontWeight: FontWeight.normal),
@@ -239,14 +323,14 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
+                            children: [
+                              const Icon(
                                 Icons.water,
                                 size: 34,
                                 color: AppColor.cardColor,
                               ),
-                              SizedBox(height: 5),
-                              Text(
+                              const SizedBox(height: 5),
+                              const Text(
                                 AppString.waterLevel,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -254,11 +338,11 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.normal),
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Text(
-                                AppString.unitThree,
+                                "$_waterLevel",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: AppColor.cardColor,
                                     fontSize: 26,
                                     fontWeight: FontWeight.normal),
@@ -287,13 +371,16 @@ class _DangerFloodingScreenState extends State<DangerFloodingScreen> {
                         onPressed: () {},
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.call,
-                              size: 25,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.call),
+                              onPressed: () async {
+                                UrlLauncher.launchUrl(
+                                    "tel://0772620836" as Uri);
+                              },
                             ),
-                            SizedBox(width: 20),
-                            Text(AppString.callEmergency,
+                            const SizedBox(width: 20),
+                            const Text(AppString.callEmergency,
                                 style: TextStyle(
                                     fontSize: 12, fontWeight: FontWeight.w800)),
                           ],

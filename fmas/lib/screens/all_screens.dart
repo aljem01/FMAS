@@ -15,11 +15,11 @@ class _SampleScreensState extends State<SampleScreens> {
       appBar: AppBar(
         title: const Text('FMAS SCREENS ( 95% finished)'),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             CoolRouteButton(
               name: 'Welcome',
               route: AppRoute.welcomeScreenRoute,
@@ -86,7 +86,7 @@ class CoolRouteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: TextButton(
           onPressed: () {
