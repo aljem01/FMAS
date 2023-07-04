@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "fma_project" "\0"
+            VALUE "FileDescription", "flood_monitoring_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fma_project" "\0"
+            VALUE "InternalName", "flood_monitoring_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "fma_project.exe" "\0"
-            VALUE "ProductName", "fma_project" "\0"
+            VALUE "OriginalFilename", "flood_monitoring_app.exe" "\0"
+            VALUE "ProductName", "flood_monitoring_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

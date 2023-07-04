@@ -1,0 +1,362 @@
+* {
+  box-sizing: border-box;
+  font-family: Montserrat;
+  /* font-family: 'Inter','Montserrat',sans-serif; */
+  font-size: 14px;
+  font-weight: 400;
+  /*line-height: 24px;*/
+  /* color: #8f8f8f; */
+  color: #000;
+  transition: all .5s ease-in-out;
+  -ms-transition: all .5s ease-in-out;
+  -moz-transition: all .5s ease-in-out;
+  -o-transition: all .5s ease-in-out;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  background: transparent;
+  height: 5px;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 20px;
+  border: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #adb5bd;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #4e4343;
+}
+
+::-webkit-scrollbar-button {
+  color: #000;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background: #3bd788;
+}
+
+body {
+  background: #6151C4;
+}
+
+.container_main {
+  width: 100vw;
+  height: 100vh;
+}
+
+.container_main .main_component_container {
+  position: absolute;
+  bottom: 1vh;
+  /* top: 1vh; */
+  left: 0;
+  width: 100%;
+  max-height: 99vh;
+  overflow-y: auto;
+  padding: 1vh 1vh 0 1vh;
+}
+
+.container_main .main_component_container .component_container {
+  z-index: 0;
+}
+
+.container_main .main_component_container .component_container .welcome_note_container {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 15px;
+  padding: 15px 20px 30px 20px;
+}
+
+h3 {
+  padding: 0;
+  margin: 0;
+  font-size: 1.0rem;
+  color: #000;
+  font-weight: bolder;
+  text-align: center;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+i.arrow {
+  color: #6151C4;
+  font-size: 1.0rem;
+}
+
+i.dot {
+  color: #6151C4;
+  font-size: 0.6rem;
+}
+
+.get_started_container {
+  padding: 30px 30px 0 30px;
+}
+
+.get_started_container .btn {
+  width: 100%;
+  background: #6151C4;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 7px;
+  border-radius: 8px;
+  border: 1px solid #6151C4!important;
+}
+
+p a {
+  font-size: 0.8rem;
+}
+
+form .form-label {
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+form .form-control {
+  height: 32px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-color: #f1ebeb;
+  outline: none;
+  box-shadow: none!important;
+}
+
+form .form-select {
+  min-height: 30px;
+  border-radius: 4px;
+  outline: none;
+  box-shadow: none!important;
+  text-align-last: center;
+  color: #6151C4;
+}
+
+.account_action_container .btn {
+  width: 100%;
+  background: #6151C4;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  padding: 9px;
+  border-radius: 8px;
+  border: 1px solid #6151C4!important;
+}
+
+input::placeholder {
+  color: #ced4da!important;
+  font-size: 10px;
+}
+
+textarea::placeholder {
+  color: #ced4da!important;
+}
+
+.widget_icons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+}
+
+.widget_icons .btn {
+  background: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+}
+
+.widget_icons .btn i {
+  font-size: 0.8rem;
+}
+
+.widget_icons h4 {
+  font-size: 1.7rem;
+  color: #ede5e5;
+}
+
+.widget_icons p {
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.flooding_chance_container {
+  /* margin-bottom: 46px; */
+  margin-top: -20px;
+}
+
+.flooding_chance_container h3 {
+  font-size: 3.6rem;
+  color: #dcd4d4;
+}
+
+.flooding_chance_container p {
+  font-size: 1.0rem;
+  color: #fff;
+}
+.rainfall_waterlevel_container .dynamic_color {
+  min-width: 150px;
+  background: #6151C4;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rainfall_waterlevel_container .element_container {
+  padding: 30px 15px 15px 15px;
+}
+
+.rainfall_waterlevel_container .element_container i {
+  font-size: 2.4rem;
+}
+
+.element_container h3 {
+  font-size: 2.5rem;
+}
+
+.element_container.warning {
+  background: linear-gradient(#ffc107 , #6151C4B0);
+}
+
+.element_container * {
+  color: #fff;
+}
+
+.btn.emergency_activated {
+  background: #ff0000;
+  border: 2px solid #ff0000!important;
+}
+
+.btn.disabled.emergency_deactivated {
+  background: #D3D2D2;
+  border: 2px solid #D3D2D2!important;
+}
+
+.add_new_user {
+  font-size: 0.9rem;
+  color: #6151C4;
+  font-weight: 900;
+  border: none;
+}
+
+.add_new_user i {
+  font-size: 1.1rem;
+  color: #6151C4;
+}
+
+.profile_container .profile_outer_container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  padding: 2px;
+  border: 2px dashed #000;
+}
+
+.profile_container .profile_outer_container .profile_inner_container {
+  width: 90px;
+  height: 90px;
+  padding: 0;
+  border-radius: 50%;
+  background: #D3D2D2;
+}
+
+.icon_container_user {
+  margin-top: -11px;
+}
+
+.icon_container_user .container_icon {
+  width: 21px;
+  height: 21px;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.icon_container_user .container_icon i {
+  font-size: 0.9rem;
+  color: #000;
+}
+
+.user_details_container h3 {
+  font-size: 1.3rem;
+}
+
+.user_details_container span {
+  font-size: 1.0rem;
+  color: #000;
+}
+
+.link_container {
+  margin-top: 30px;
+}
+
+.link_container .btn {
+  padding: 15px 10px 10px 10px;
+  margin: 0;
+  color: #000;
+  font-weight: 900;
+  border-bottom: 1px solid rgb(241,237,237)!important;
+  box-shadow: none;
+}
+
+.notification_container {
+  padding: 10px;
+  margin: 5px;
+}
+
+.notification_container p {
+  font-size: 0.8rem;
+}
+
+.notification_container i {
+  font-size: 1.2rem;
+}
+
+.notification_container.safe {
+  border-radius: 10px;
+  border: 1px solid #2CCF03;
+  background: rgba(44, 207, 3, 0.08);
+}
+
+.notification_container.safe i {
+  color: #2CCF03;
+}
+
+.notification_container.warning {
+  border-radius: 10px;
+  border: 1px solid rgba(250, 150, 0, 0.69);
+  background: rgba(250, 150, 0, 0.08);
+}
+
+.notification_container.warning i {
+  color: rgba(250,150,0,0.69);
+}
+
+.notification_container.danger {
+  border-radius: 10px;
+  border: 1px solid rgba(236, 14, 14, 0.74);
+  background: rgba(236, 14, 14, 0.08);
+}
+
+.notification_container.danger i {
+  color: #EC0E0E;
+}
+

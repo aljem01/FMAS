@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
+    <title>FMAS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="css/fmas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+<body>
+    <div style="position: fixed; top: 2px; right: 2px;z-index: 100;" class="toast_container d-none flex-column align-items-end p-0 m-0 px-1">
+        <a class="toast align-items-center show border-0 my-1 text-decoration-none animate__animated animate__bounceInRight" style="animation-duration: 1.5s;background:rgba(0,0,0,0.8)" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body ps-4 d-flex flex-fill align-items-center flex-wrap text-white">
+                    <span class="btn-close me-2 p-0 m-0 d-inline-flex align-items-center justify-content-center"><i class="fas fa-circle-notch fa-spin fa-fw" style="color:#FFf;"></i></span>Loading components, please wait
+                </div>
+                <button type="button" class="btn-close mx-3 p-0 m-0 d-inline-flex align-items-center justify-content-center" data-bs-dismiss="toast"><i class="fas fa-times-circle fa-fw" style="color:#FFf;"></i></button>
+            </div>
+        </a>
+    </div>
+    <div style="position: fixed; top: 2px; right: 2px;z-index: 100;" class="toast_container_loading d-none flex-column align-items-end p-0 m-0 px-1">
+        <a class="toast align-items-center show border-0 my-1 text-decoration-none animate__animated animate__bounceInRight" style="animation-duration: 1.5s;background:rgba(0,0,0,0.8)" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body ps-4 d-flex flex-fill align-items-center flex-wrap text-white">
+                    <span class="btn-close me-2 p-0 m-0 d-inline-flex align-items-center justify-content-center"><i class="fas fa-circle-notch fa-spin fa-fw" style="color:#FFf;"></i></span>Processing request, please wait
+                </div>
+                <button type="button" class="btn-close mx-3 p-0 m-0 d-inline-flex align-items-center justify-content-center" data-bs-dismiss="toast"><i class="fas fa-times-circle fa-fw" style="color:#FFf;"></i></button>
+            </div>
+        </a>
+    </div>
+    <div class="container_main position-relative p-0 m-0 p-3">
+        <div class="w-100 py-3"><img class="w-100" src="img/uganda.png"></div>
+        <div class="main_component_container position-absolute row px-0 pb-0 m-0 d-flex align-items-end">
+            <div class="component_container col-md-4 col-lg-3 m-0">
+                <div class="w-100 welcome_note_container">
+                    <div class="pt-2 d-flex align-items-center px-4">
+                        <a class="btn m-0 p-0 py-2 border-0" href="index.html"><i class="fas fa-chevron-left arrow"></i></a>
+                        <h6 class="p-0 m-0 w-100 text-center fw-bolder text-dark">LOGIN</h6>
+                    </div>
+                    <form class="p-0 m-0 px-4" method="POST" onsubmit="logIn(event)">
+                        <div class="px-5 mb-4">
+                            <select class="form-select m-0 border-0 p-0 m-0 px-3 border-0 rounded-0 p-0 m-0 bg-transparent" onchange="changeScreen()">
+                                <option value="resident">Resident</option>
+                                <option value="authority">Authority</option>
+                            </select>
+                        </div>
+                        <div class="py-2"><label class="form-label">Email</label><input class="form-control email border-0 rounded-0 p-0 m-0 bg-transparent" type="search" autofocus="" placeholder="enter your email here ..."></div>
+                        <div class="py-2"><label class="form-label">Password</label><input class="form-control password border-0 rounded-0 p-0 m-0 bg-transparent" type="password" placeholder="Enter your password here ..."></div>
+                        <div class="account_action_container px-4 mt-4"><button class="btn" type="submit">Login</button></div>
+                    </form>
+                    <div>
+                        <p class="p-0 m-0 mt-2">Forgot your password ?<a class="ms-2 text-decoration-none fw-bolder" href="#">Click Here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/fmas.js"></script>
+    <script>
+        changeScreen = ()=>{
+            let user = $('.form-select').val()
+            if(user == "authority"){
+                window.location.href = "login_authority.html";
+            }
+        }
+    </script>
+    <script>
+        logIn = (e)=>{
+            e.preventDefault()
+            const jsonData = '{"account": "Resident", "name": "'+$('.email').val()+'", "password": "'+$('.password').val()+'", "action": "login"}';
+            $.ajax({
+                url:"https://agrox.farm/api/fmas/authorization/"+jsonData,
+                type: 'GET',
+                beforeSend:()=>{
+                    $('.toast_container_loading').removeClass('d-none')
+                    $('.toast_container_loading').addClass('d-flex')
+                },
+                success: function (data,success) {
+                    console.log(data)
+                    $('.toast_container_loading').addClass('d-none')
+                    if(data.includes('success')){
+                        const dataArr = data.split("-")
+                        setCookie("fmas_user", dataArr[0], 5);
+                    }else{
+                        $('.toast-body').text(data)
+                        $('.toast_container').removeClass('d-none')
+                        $('.toast_container').addClass('d-flex')
+                        setTimeout(()=>{
+                            $('.toast_container').addClass('d-none')
+                            $('.toast_container').removeClass('d-flex')
+                        },10000)
+                    }
+                },
+                error: function (error) {
+                    alert("An error occured while completing the authorization process, please try again later")
+                }
+            });
+        }
+    </script>
+    <script>
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            window.location.href = "home_page_resident.html";
+        }
+    </script>
+</body>
+</html>

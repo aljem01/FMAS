@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
+    <title>FMAS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="css/fmas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div style="position: fixed; top: 0; right: 2px;z-index: 100;" class="toast_container d-flex flex-column align-items-end p-0 m-0 px-1">
+        <div class="toast align-items-center show border-0 my-1 text-decoration-none animate__animated animate__bounceInRight" style="animation-duration: 1.5s;background:rgba(0,0,0,0.8)" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body ps-4 d-flex flex-fill align-items-center flex-wrap text-white">
+                    <span class="me-2 p-0 m-0 d-inline-flex align-items-center justify-content-center loadingContainer"><i class="fas fa-circle-notch fa-spin fa-fw" style="color:#FFf;"></i></span>Loading components, please wait
+                </div>
+                <button type="button" class="btn-close mx-3 p-0 m-0 d-inline-flex align-items-center justify-content-center" data-bs-dismiss="toast"><i class="fas fa-times-circle fa-fw" style="color:#FFf;"></i></button>
+            </div>
+        </div>
+    </div>
+    <div style="position: fixed; top: 0; right: 2px;z-index: 100;" class="toast_container_progress d-flex d-none flex-column align-items-end p-0 m-0 px-1">
+        <div class="toast align-items-center show border-0 my-1 text-decoration-none animate__animated animate__bounceInRight" style="animation-duration: 1.5s;background:rgba(0,0,0,0.8)" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex align-items-center">
+                <div class="toast-body ps-4 d-flex align-items-center flex-nowrap text-white">
+                    <span class="me-2 p-0 m-0 d-inline-flex align-items-center justify-content-center loadingContainerProgress"><i class="fas fa-circle-notch fa-spin fa-fw" style="color:#FFf;"></i></span><span class="text_Body" style="color: #fff;">Loading components, please wait</span>
+                </div>
+                <button type="button" class="btn-close mx-3 p-0 m-0 d-inline-flex align-items-center justify-content-center" data-bs-dismiss="toast"><i class="fas fa-times-circle fa-fw" style="color:#FFf;"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="container_main position-relative p-0 m-0 p-3" style="background: linear-gradient(#ffc107 , #ffc10700);">
+        <div class="w-100 py-3 position-relative"><img class="w-100" src="img/transparent_uganda.png">
+            <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center flex-column" style="top: -50px;">
+                <img style="width: 35%;" src="img/House.svg">
+                <div class="flooding_chance_container" style="margin-top: -50px;">
+                    <h3 class="text-center chance_of_flooding">--</h3>
+                    <p class="text-center">Chance of flooding</p>
+                </div>
+            </div>
+        </div>
+        <div class="main_component_container position-absolute row px-0 pb-0 m-0 overflow-auto">
+            <div class="widget_icons d-flex align-items-center justify-content-center"><button class="btn p-0 m-1 d-inline-flex align-items-center justify-content-center shadow" type="button"><i class="fas fa-map-marker-alt"></i></button>
+                <div class="d-flex flex-column flex-fill px-3">
+                    <h4 class="p-0 m-0 text-center text-white fw-bolder">River Mobuku</h4>
+                    <p class="p-0 m-0 text-center text-white fw-bolder">Likely to flood</p>
+                </div><a class="btn p-0 m-1 d-inline-flex align-items-center justify-content-center shadow" onclick="loadProfile()"><i class="fas fa-user-lock"></i></a>
+            </div>
+            <div class="component_container col-md-4 col-lg-3 m-0">
+                <div class="w-100 welcome_note_container home animate__animated" style="animation-duration: 1s;">
+                    <div class="pt-2 d-flex align-items-center px-4"><a class="btn m-0 p-0 py-2 border-0" href="index.html"><i class="fas fa-chevron-left arrow"></i></a>
+                        <h6 class="p-0 m-0 w-100 text-center fw-bolder text-dark">Details</h6><button class="btn m-0 p-0 py-2 border-0" type="button" onclick="showNotifcations()"><i class="far fa-bell arrow"></i></button>
+                    </div>
+                    <div class="dynamic_container animate__animated" style="animation-duration: 0.5s;">
+                        <div class="w-100 p-0 m-0 px-4 d-flex mt-5 justify-content-between rainfall_waterlevel_container">
+                            <div class="dynamic_color d-flex">
+                                <div class="element_container warning shadow-lg d-flex flex-fill flex-column align-items-center">
+                                    <i class="fas fa-cloud-showers-heavy"></i>
+                                    <div class="details_container d-flex flex-fill flex-column justify-content-end mt-3">
+                                        <p>Rainfall</p>
+                                        <h3 class="rainfall_intensity">--</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dynamic_color d-flex">
+                                <div class="element_container warning shadow-lg d-flex flex-fill flex-column align-items-center">
+                                    <i class="fas fa-water"></i>
+                                    <div class="details_container d-flex flex-fill flex-column justify-content-end mt-3">
+                                        <p>Water Level</p>
+                                        <h3 class="waler_level">--</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="account_action_container px-4 mt-5">
+                            <a class="btn d-none align-items-center justify-content-center border-0 emergency_activated" role="button" onclick="makeACall()"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                            <a class="btn disabled d-flex align-items-center justify-content-center border-0 emergency_deactivated" role="button" href="tel:+256785313545"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                        </div>
+                        <div>
+                            <p class="p-0 m-0 mt-3">Register a family member ?<a class="ms-2 text-decoration-none fw-bolder" onclick="newUser()">Register</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 welcome_note_container animate__animated profile d-none" style="animation-duration: 1s;">
+                    <div class="pt-2 d-flex align-items-center px-4">
+                        <a class="btn m-0 p-0 py-2 border-0" onclick="loadHomePage()"><i class="fas fa-chevron-left arrow"></i></a>
+                        <h6 class="p-0 m-0 w-100 text-center fw-bolder text-dark">Profile</h6>
+                        <a class="btn m-0 p-0 py-2 border-0" onclick="showNotifcations()"><i class="far fa-bell arrow"></i></a>
+                    </div>
+                    <div class="dynamic_container animate__animated" style="animation-duration: 0.5s;">
+                        <div class="w-100 p-0 m-0 px-4 d-flex mt-3 flex-column profile_container align-items-center justify-content-center">
+                            <div class="profile_outer_container d-flex align-items-center justify-content-center">
+                                <div class="profile_inner_container"><img class="w-100" src="img/account_circle_black_24dp.svg"></div>
+                            </div>
+                        </div>
+                        <div class="icon_container_user d-flex align-items-center justify-content-center">
+                            <div class="container_icon d-inline-flex align-items-center justify-content-center"><i class="fas fa-pencil-alt"></i></div>
+                        </div>
+                        <div class="user_details_container mt-4 d-flex flex-column align-items-center">
+                            <h3 class="name">--</h3><span class="email">--</span><span class="tel">--</span>
+                        </div>
+                        <div class="link_container px-4">
+                            <button class="btn w-100 text-start rounded-0 border-0" type="button">Contact Us</button>
+                            <button class="btn w-100 text-start rounded-0 border-0" type="button">Privacy Policy</button>
+                            <button class="btn w-100 text-start rounded-0 border-0" type="button">Terms and Conditions</button>
+                            <button class="btn w-100 text-start rounded-0 border-0" type="button">Settings</button>
+                            <button class="btn w-100 text-start rounded-0 border-0 text-danger fw-bolder" type="button" onclick="logOut()">Logout</button>
+                        </div>
+                        <div class="account_action_container px-4 mt-5">
+                            <a class="btn d-none align-items-center justify-content-center border-0 emergency_activated" role="button" onclick="makeACall()"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                            <a class="btn disabled d-flex align-items-center justify-content-center border-0 emergency_deactivated" role="button" href="tel:+256785313545"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                        </div>
+                        <div>
+                            <p class="p-0 m-0 mt-3">Register a family member ?<a class="ms-2 text-decoration-none fw-bolder" onclick="newUser()">Register</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 welcome_note_container animate__animated notification d-none" style="animation-duration: 1s;">
+                    <div class="pt-2 d-flex align-items-center px-4">
+                        <button class="btn m-0 p-0 py-2 border-0" type="button" onclick="loadHomePage()"><i class="fas fa-chevron-left arrow"></i></button>
+                        <h6 class="p-0 m-0 w-100 text-center fw-bolder text-dark">Notifications</h6>
+                    </div>
+                    <div class="dynamic_container animate__animated" style="animation-duration: 0.5s;">
+                        <div class="w-100 px-4 my-5 notification_container">
+                            <p class="p-0 m-0 text-center">Notifications not available at the moment</p>
+                        </div>
+                        <div class="account_action_container px-4 mt-5">
+                            <a class="btn d-none align-items-center justify-content-center border-0 emergency_activated" role="button" onclick="makeACall()"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                            <a class="btn disabled d-flex align-items-center justify-content-center border-0 emergency_deactivated" role="button" href="tel:+256785313545"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                        </div>
+                        <div>
+                            <p class="p-0 m-0 mt-3">Register a family member ?<a class="ms-2 text-decoration-none fw-bolder" onclick="newUser()">Register</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 welcome_note_container animate__animated newUser d-none" style="animation-duration: 1s;">
+                    <div class="pt-2 d-flex align-items-center px-4">
+                        <a class="btn m-0 p-0 py-2 border-0" onclick="loadHomePage()"><i class="fas fa-chevron-left arrow"></i></a>
+                        <h6 class="p-0 m-0 w-100 text-center fw-bolder text-dark">Family Member</h6>
+                        <a class="btn m-0 p-0 py-2 border-0" onclick="showNotifcations()"><i class="far fa-bell arrow"></i></a>
+                    </div>
+                    <div class="dynamic_container animate__animated" style="animation-duration: 0.5s;">
+                        <form class="p-0 m-0 px-4 mt-5" method="POST" onsubmit="addNewUser(event)">
+                            <div class="py-2"><label class="form-label">Full Name</label><input required class="full_name form-control" type="search" autofocus=""></div>
+                            <div class="py-2"><label class="form-label">Phone Contact</label><input required class="phone_contact form-control" type="tel"></div>
+                            <div class="py-2"><label class="form-label">Place of Residence</label><input required class="residence form-control" type="search"></div>
+                            <div class="py-2"><label class="form-label">Email Address</label><input required class="user_email form-control" type="email"></div>
+                            <div class="py-2"><label class="form-label">Password</label><input required class="password form-control" type="password"></div>
+                            <div class="py-2"><label class="form-label">Confirm Password</label><input required class="confirm_password form-control" type="password"></div>
+                            <div class="account_action_container mt-4"><button class="btn" type="submit">ADD MEMBER</button></div>
+                        </form>
+                        <div class="account_action_container px-4 mt-3">
+                            <a class="btn d-none align-items-center justify-content-center border-0 emergency_activated" role="button" onclick="makeACall()"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                            <a class="btn disabled d-flex align-items-center justify-content-center border-0 emergency_deactivated" role="button" href="tel:+256785313545"><i class="fas fa-phone-alt text-white me-2"></i>Call Emergency</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="js/fmas.js"></script> -->
+    <script>
+        getCookie = (cname)=>{
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+    <script>
+        loadProfile = ()=>{
+            $('.profile').removeClass('d-none')
+            $('.home').removeClass('d-none').addClass('d-none')
+            $('.notification').removeClass('d-none').addClass('d-none')
+            $('.newUser').removeClass('d-none').addClass('d-none')
+        }
+        loadHomePage = () => {
+            $('.home').removeClass('d-none')
+            $('.profile').removeClass('d-none').addClass('d-none')
+            $('.notification').removeClass('d-none').addClass('d-none')
+            $('.newUser').removeClass('d-none').addClass('d-none')
+        }
+        showNotifcations = () => {
+            $('.notification').removeClass('d-none')
+            $('.home').removeClass('d-none').addClass('d-none')
+            $('.profile').removeClass('d-none').addClass('d-none')
+            $('.newUser').removeClass('d-none').addClass('d-none')
+        }
+        newUser = () => {
+            $('.newUser').removeClass('d-none')
+            $('.home').removeClass('d-none').addClass('d-none')
+            $('.profile').removeClass('d-none').addClass('d-none')
+            $('.notification').removeClass('d-none').addClass('d-none')
+        }
+    </script>
+    <script>
+        checkLastIDCookie = (waterLevel,chanceOflooding) => {
+            let fmasWaterLevel = getCookie("fmas_flood_water_level")
+            if (fmasWaterLevel != "") {
+                if(waterLevel != fmasWaterLevel){
+                    FMAS.postMessage("notification::There is a "+chanceOflooding+"% chance of flooding in R. Mobuku Area with water level reaching "+waterLevel+"");
+                }
+            } else {
+                const d = new Date();
+                d.setTime(d.getTime() + (15 * 24 * 60 * 60 * 1000));
+                let expires = "expires="+d.toUTCString();
+                document.cookie = "fmas_flood_water_level" + "=" + waterLevel + ";" + expires + ";path=/";
+                FMAS.postMessage("notification::There is a "+chanceOflooding+"% chance of flooding in R. Mobuku Area with water level reaching "+waterLevel+"");
+            }    
+        }
+        getWaterLevel = ()=>{
+            $.ajax({
+                url:"https://api.thingspeak.com/channels/2186309/feeds.json",
+                method: "GET",
+                success: function(data,success){
+                    let parsedJson = data;
+                    let lastEnteredID = parsedJson['channel']['last_entry_id'];
+                    let waterLevel = 0;
+                    let feeds = parsedJson['feeds']
+                    feeds.forEach((eachFeed) => {
+                        if (eachFeed['entry_id'] == lastEnteredID){
+                            waterLevel = eachFeed['field1']
+                        }
+                    });
+                    $('.waler_level').html(waterLevel)
+                    let chance_of_flooding = Math.round((waterLevel/260) * 100)
+                    $('.emergency_activated').removeClass('d-none')
+                    $('.emergency_activated').addClass('d-none')
+                    $('.emergency_deactivated').removeClass('d-none')
+                    if (waterLevel < 220) {
+                        $('.chance_of_flooding').html(chance_of_flooding+"%")
+                        $('.container_main,.element_container').css({'background':'linear-gradient(#00ff00 , #00ff0000)'})
+                    } else {
+                        if (waterLevel < 260) {
+                            $('.chance_of_flooding').html(chance_of_flooding+"%")
+                            $('.container_main,.element_container').css({'background':'linear-gradient(#ffc107 , #ffc10700)'})
+                        } else {
+                            $('.chance_of_flooding').html("100%")
+                            $('.container_main,.element_container').css({'background':'linear-gradient(#ff0000 , #ff000000)'})
+                            $('.emergency_activated').removeClass('d-none')
+                            $('.emergency_deactivated').removeClass('d-none')
+                            $('.emergency_deactivated').addClass('d-none')
+                        }
+                    }
+                    $('.toast_container').addClass('d-none')
+                }
+            });
+        }
+        getRainFall = ()=>{
+            $.ajax({
+                url:"https://climate-api.open-meteo.com/v1/climate?latitude=0.32&longitude=32.58&start_date=2023-06-26&end_date=2023-06-26&daily=precipitation_sum,rain_sum&models=CMCC_CM2_VHR4&timeformat=unixtime&min=2023-06-25&max=2023-06-26",
+                method: "GET",
+                success: function(data,success){
+                    let parsedJson = data
+                    let lastEnteredID = parsedJson['daily']['precipitation_sum']
+                    $('.rainfall_intensity').html(lastEnteredID)
+                }
+            });
+        }
+        setInterval(()=>{
+            getWaterLevel()
+            getRainFall()
+            loadNotifications()
+        },1000)
+    </script>
+    <script>
+        addNewUser = (e) => {
+            e.preventDefault()
+            if($('.password').val() == $('.confirm_password').val()){
+                const jsonData = '{"account": "Resident", "name": "'+$('.full_name').val()+'", "contact": "'+$('.phone_contact').val()+'", "residence": "'+$('.residence').val()+'", "username": "'+$('.user_email').val()+'", "password": "'+$('.password').val()+'", "action": "register"}'
+                $.ajax({
+                    url:"https://agrox.farm/api/fmas/authorization/"+jsonData,
+                    type: "GET",
+                    beforeSend:()=>{
+                        $('.loadingContainerProgress').removeClass('d-none')
+                        $('.text_Body').text('Registering family member, please wait')
+                        $('.toast_container_progress').removeClass('d-none')
+                    },
+                    success: function(data,success){
+                        if(data == "proceed to login"){
+                            $('.full_name').val('')
+                            $('.phone_contact').val('')
+                            $('.residence').val('')
+                            $('.user_email').val('')
+                            $('.password').val('')
+                            $('.confirm_password').val('')
+
+                            $('.loadingContainerProgress').addClass('d-none')
+                            $('.text_Body').text('You have successfully added a new family member')
+                            $('.toast_container_progress').removeClass('d-none')
+                            setTimeout(()=>{
+                                $('.toast_container_progress').addClass('d-none')
+                            },10000)
+                        }else{
+                            $('.loadingContainerProgress').addClass('d-none')
+                            $('.text_Body').text(data)
+                            $('.toast_container_progress').removeClass('d-none')
+                            setTimeout(()=>{
+                                $('.toast_container_progress').addClass('d-none')
+                            },10000)
+                        }
+                    },
+                    error:()=>{
+                        $('.loadingContainer').addClass('d-none')
+                        $('.text_Body').text('An error occured while adding a new family member, please try again later')
+                        $('.toast_container_progress').removeClass('d-none')
+                        $('.toast').css({'background':'rgba(255,0,0,0.8)'})
+                        setTimeout(()=>{
+                            $('.toast_container_progress').addClass('d-none')
+                            $('.toast').css({'background':'rgba(0,0,0,0.8)'})
+                        },10000)
+                        alert("An error occured while adding a new family member, please try again later")
+                    }
+                }); 
+            }else{
+                $('.text_Body').text("Passwords did not match")
+                $('.toast_container_progress').removeClass('d-none')
+                setTimeout(()=>{
+                    $('.toast_container_progress').addClass('d-none')
+                },1000)
+            }
+        }
+    </script>
+    <script>
+        triggerSMS = () => $.ajax({url:"https://agrox.farm/api/fmas/flooding/check",method: "GET",success: function(data,success){}})
+        loadNotifications = () => {
+            $.ajax({
+                url:"https://api.thingspeak.com/channels/2186309/feeds.json",
+                method: "GET",
+                success: function(data,success){
+                    let parsedJson = data;
+                    let lastEnteredID = parsedJson['channel']['last_entry_id'];
+                    let feeds = parsedJson['feeds'].reverse();
+                    var notifications = ''
+                    let index = 0;
+                    feeds.forEach((eachFeed) => {
+                        index++;
+                        if (index > 1) {
+                            if (parseInt(feeds[index - 1]["field1"]) == parseInt(feeds[index - 2]["field1"])) {
+                            }else{
+                                let chance_of_flooding_notifications = Math.round((parseInt(eachFeed['field1'])/260) * 100)
+                                if (eachFeed['entry_id'] == lastEnteredID){
+                                    checkLastIDCookie(eachFeed['field1'],chance_of_flooding_notifications)
+                                }
+                                if (eachFeed['field1'] < 220) {
+                                    notifications = notifications + '<div class="d-flex align-items-center notification_container safe"><i class="far fa-check-circle me-2"></i><p class="p-0 m-0 text-start">There\'s a&nbsp; '+chance_of_flooding_notifications+'% chance of flood in R. Mobuku area with water level reaching '+eachFeed['field1']+'</p></div>'
+                                } else {
+                                    if (eachFeed['field1'] < 260) {
+                                        notifications = notifications + '<div class="d-flex align-items-center notification_container warning"><i class="fas fa-info-circle me-2"></i><p class="p-0 m-0 text-start">There\'s a&nbsp; '+chance_of_flooding_notifications+'% chance of flood in R. Mobuku area with water level reaching '+eachFeed['field1']+'</p></div>'
+                                    } else {
+                                        triggerSMS();
+                                        notifications = notifications + '<div class="d-flex align-items-center notification_container danger"><i class="fas fa-exclamation-triangle me-2"></i><p class="p-0 m-0 text-start">There\'s a&nbsp; '+chance_of_flooding_notifications+'% chance of flood in R. Mobuku area with water level reaching '+eachFeed['field1']+'</p></div>'
+                                    }
+                                }
+                            }
+                        }else{
+                            let chance_of_flooding_notifications = Math.round((parseInt(eachFeed['field1'])/260) * 100)
+                            if (eachFeed['entry_id'] == lastEnteredID){
+                                checkLastIDCookie(eachFeed['field1'],chance_of_flooding_notifications)
+                            }
+                            if (eachFeed['field1'] < 220) {
+                                notifications = notifications + '<div class="d-flex align-items-center notification_container safe"><i class="far fa-check-circle me-2"></i><p class="p-0 m-0 text-start">There\'s a&nbsp; '+chance_of_flooding_notifications+'% chance of flood in R. Mobuku area with water level reaching '+eachFeed['field1']+'</p></div>'
+                            } else {
+                                if (eachFeed['field1'] < 260) {
+                                    notifications = notifications + '<div class="d-flex align-items-center notification_container warning"><i class="fas fa-info-circle me-2"></i><p class="p-0 m-0 text-start">There\'s a&nbsp; '+chance_of_flooding_notifications+'% chance of flood in R. Mobuku area with water level reaching '+eachFeed['field1']+'</p></div>'
+                                } else {
+                                    triggerSMS();
+                                    notifications = notifications + '<div class="d-flex align-items-center notification_container danger"><i class="fas fa-exclamation-triangle me-2"></i><p class="p-0 m-0 text-start">There\'s a&nbsp; '+chance_of_flooding_notifications+'% chance of flood in R. Mobuku area with water level reaching '+eachFeed['field1']+'</p></div>'
+                                }
+                            }
+                        }
+                    });
+                    $('.notification_container').html(notifications)
+                }
+            });
+        }
+        $(document).ready(function () {
+            checkCookie = ()=>{
+                let fmasUser = getCookie("fmas_user")
+                if (fmasUser != "") {
+                    $.ajax({
+                        url:"https://agrox.farm/api/fmas/get_user_details/"+fmasUser,
+                        method: "GET",
+                        success: function(data,success){
+                            let parsedJson = JSON.parse(data)
+                            $('.name').text(parsedJson['name'])
+                            $('.email').text(parsedJson['email'])
+                            $('.tel').text(parsedJson['phoneNumber'])
+                        }
+                    });
+                } else {
+                    window.location.href = "login_resident.html";
+                }
+            }
+            checkCookie()
+        });
+    </script>
+    <script>
+        logOut = () => {
+            document.cookie = "fmas_user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "index.html";
+        }
+    </script>
+    <script>
+        makeACall = () => {
+            FMAS.postMessage("Make a phone call");
+            //FMAS.postMessage("JavascriptからDart実行！");
+        }
+    </script>
+</body>
+</html>
